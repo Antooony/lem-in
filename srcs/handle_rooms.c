@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 19:13:24 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/27 22:36:08 by adenis           ###   ########.fr       */
+/*   Updated: 2017/03/28 16:55:23 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,12 @@
 void		display_rooms(t_room *room)
 {
 	ft_printf("%-10s", room->name);
-	ft_printf("Start : %d, end : %d\n",room->start, room->end);
-	// if (room->start)
-	// 	ft_printf(" --    ##START\n");
-	// else if (room->end)
-	// 	ft_printf(" --    ##END\n");
-	// else
-	// 	ft_printf("\n");
+	if (room->start)
+		ft_printf(" --    ##START\n");
+	else if (room->end)
+		ft_printf(" --    ##END\n");
+	else
+		ft_printf("\n");
 	room->next ? display_rooms(room->next) : NULL;
 }
 
@@ -48,7 +47,7 @@ int			still_ox(t_list *lst)
 			lst = lst->next;
 			continue ;
 		}
-		if (check_ox(LINE))
+		if (isox(LINE))
 			return (1);
 		else
 			return (0);
@@ -59,9 +58,9 @@ int			still_ox(t_list *lst)
 
 t_room		*fill_room(t_room *room, t_list *lst)
 {
-	if (!check_ox(LINE))
+	if (!isox(LINE))
 		return (room);
-	room->name = ft_strsub(LINE, 0, ft_strchr(LINE, ' ') + 1 - LINE);
+	room->name = ft_strsub(LINE, 0, ft_strchr(LINE, ' ') - LINE);
 	if (lst->next && still_ox(lst->next))
 	{
 		room->next = ft_newroom();

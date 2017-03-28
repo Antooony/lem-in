@@ -1,41 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools.c                                            :+:      :+:    :+:   */
+/*   checks_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/27 15:34:27 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/28 17:19:14 by adenis           ###   ########.fr       */
+/*   Created: 2017/03/28 16:56:02 by adenis            #+#    #+#             */
+/*   Updated: 2017/03/28 18:31:47 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lem-in.h"
 
-void	freelst(void *content, size_t content_size)
+int			isvalid(char *s)
 {
-	content_size = 0;
-	free(content);
-	content = NULL;
-}
-
-void	del(void *content, size_t size)
-{
-	if (content)
-		free(content);
-	content = NULL;
-	size = 0;
-}
-
-void	display_lst(t_list	*lst)
-{
-	ft_printf("%s\n", (char *)lst->content);
-	lst->next ? display_lst(lst->next) : NULL;
-}
-
-void	init_infos(void)
-{
-	g_infos.begin = NULL;
-	g_infos.start = NULL;
-	g_infos.end = NULL;
+	if (s[0] != 'L' && (islimit(s) || isox(s) || iscomment(s) || islink(s)))
+		return (1);
+	return (0);
 }

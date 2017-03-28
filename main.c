@@ -6,24 +6,28 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 11:12:02 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/27 22:10:01 by adenis           ###   ########.fr       */
+/*   Updated: 2017/03/28 16:27:08 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem-in.h"
 #include <stdio.h>
 
-void	display_lst(t_list	*lst)
+void	clean_lst(t_list *lst)
 {
-	ft_printf("%s\n", (char *)lst->content);
-	lst->next ? display_lst(lst->next) : NULL;
-}
+	t_list		*tmp;
 
-void	init_infos(void)
-{
-	infos.begin = NULL;
-	infos.start = NULL;
-	infos.end = NULL;
+	while (lst)
+	{
+		if (lst->next && iscomment((char *)lst->next->content))
+		{
+			tmp = lst->next->next;
+			ft_lstdelone(&lst->next, &del);
+			lst->next = tmp;
+			continue ;
+		}
+		lst = lst->next;
+	}
 }
 
 int		main(void)
@@ -43,5 +47,6 @@ int		main(void)
 			tmp = ft_lstnew(NULL, 0);
 		}
 	}
+	clean_lst(lst);
 	parsing(lst);
 }

@@ -6,20 +6,11 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 15:02:28 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/27 22:42:19 by adenis           ###   ########.fr       */
+/*   Updated: 2017/03/28 18:33:33 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lem-in.h"
-
-int			check_ox(char *s)
-{
-	if (!s || !ft_strchr(s, ' ')
-		|| !ft_isdigit(s[ft_strchr(s, ' ') + 1 - s]) 
-			|| !ft_isdigit(s[ft_strrchr(s, ' ') + 1 - s]))
-			return (0);
-	return (1);
-}
 
 void		get_limits(t_room *room, t_list *lst)
 {
@@ -30,7 +21,6 @@ void		get_limits(t_room *room, t_list *lst)
 	}
 	if (!ft_strcmp(LINE, "##end"))
 	{
-		ft_printf("END\n");
 		room->end = 1;
 		END = room;
 	}
@@ -42,8 +32,19 @@ void		parsing(t_list	*lst)
 
 	room = ft_newroom();
 	BEGIN = room;
+	if (ft_isdigit(LINE[0]))
+		ANTS = ft_atoi(LINE);
+	else
+		exit (0);
+	lst = lst->next;
 	while (lst)
 	{
+		if (!isvalid(LINE))
+		{
+			ft_printf("Invalid : %s\n", LINE);
+			exit(0);
+			break ;
+		}
 		if (!ft_strcmp(LINE, "##start") || !ft_strcmp(LINE, "##end"))
 		{
 			get_limits(room, lst);
@@ -55,6 +56,4 @@ void		parsing(t_list	*lst)
 		lst = lst->next;
 	}
 	display_rooms((room = BEGIN));
-	ft_printf("Start : %s\n", START->name);
-	ft_printf("end : %s\n", END->name);
 }
