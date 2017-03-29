@@ -6,45 +6,50 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 15:02:28 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/28 18:33:33 by adenis           ###   ########.fr       */
+/*   Updated: 2017/03/29 20:53:12 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lem-in.h"
 
-void		get_limits(t_room *room, t_list *lst)
+void		set_way(void)
 {
-	if (!ft_strcmp(LINE, "##start"))
-	{
-		room->start = 1;
-		START = room;
-	}
-	if (!ft_strcmp(LINE, "##end"))
-	{
-		room->end = 1;
-		END = room;
-	}
+		BEGIN = PATH->start;
+		while (PATH->next)
+			PATH = PATH->next;
+		FINISH = PATH;
 }
 
-void		parsing(t_list	*lst)
+void		parsing_2(t_list *lst)
+{
+	check_up();
+	while(!islink(LINE))
+		lst = lst->next;
+	while (lst)
+	{
+		get_links(LINE);
+		if (!lst->next)
+			break ;
+		lst = lst->next;
+	}
+	get_path(START);
+	display_lst((t_list *)PATH);
+	set_way();
+	resolution();
+}
+
+void		parsing(t_list *lst)
 {
 	t_room	*room;
 
 	room = ft_newroom();
-	BEGIN = room;
-	if (ft_isdigit(LINE[0]))
-		ANTS = ft_atoi(LINE);
-	else
-		exit (0);
+	FIRST = room;
+	ft_isdigit(LINE[0]) ? ANTS = ft_atoi(LINE) : leave();
 	lst = lst->next;
 	while (lst)
 	{
 		if (!isvalid(LINE))
-		{
-			ft_printf("Invalid : %s\n", LINE);
-			exit(0);
-			break ;
-		}
+			leave();
 		if (!ft_strcmp(LINE, "##start") || !ft_strcmp(LINE, "##end"))
 		{
 			get_limits(room, lst);
@@ -55,5 +60,6 @@ void		parsing(t_list	*lst)
 			break ;
 		lst = lst->next;
 	}
-	display_rooms((room = BEGIN));
+	parsing_2(lst->start);
 }
+ 

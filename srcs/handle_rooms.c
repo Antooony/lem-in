@@ -6,22 +6,35 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 19:13:24 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/28 16:55:23 by adenis           ###   ########.fr       */
+/*   Updated: 2017/03/29 19:16:41 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lem-in.h"
 
-void		display_rooms(t_room *room)
+void		display_rooms(t_room *room1)
 {
-	ft_printf("%-10s", room->name);
-	if (room->start)
-		ft_printf(" --    ##START\n");
-	else if (room->end)
-		ft_printf(" --    ##END\n");
+	t_room 	*tmp;
+	t_list 	*lst;
+	ft_printf("%-10s", room1->name);
+	if (room1 == START)
+		ft_printf("\t\t\t\t--START\n");
+	else if (room1 == END)
+		ft_printf("\t\t\t\t--END\n");
 	else
 		ft_printf("\n");
-	room->next ? display_rooms(room->next) : NULL;
+	if (LINK)
+	{
+		lst = LINK;
+		while (LINK)
+		{
+			tmp = LINK->content;
+			ft_printf("\t->%s\n", tmp->name);
+			LINK = LINK->next;
+		}
+		LINK = lst;
+	}
+	room1->next ? display_rooms(room1->next) : NULL;
 }
 
 t_room		*ft_newroom(void)
@@ -31,29 +44,12 @@ t_room		*ft_newroom(void)
 	new = (t_room *)malloc(sizeof(t_room));
 	new->next = NULL;
 	new->name = NULL;
-	new->connexions = NULL;
+	new->links = NULL;
 	new->end = 0;
 	new->start = 0;
 	new->stop = 0;
+	new->track = 0;
 	return (new);
-}
-
-int			still_ox(t_list *lst)
-{
-	while (lst)
-	{
-		if (LINE[0] == '#')
-		{
-			lst = lst->next;
-			continue ;
-		}
-		if (isox(LINE))
-			return (1);
-		else
-			return (0);
-		lst = lst->next;
-	}
-	return (0);
 }
 
 t_room		*fill_room(t_room *room, t_list *lst)
@@ -67,4 +63,24 @@ t_room		*fill_room(t_room *room, t_list *lst)
 		room = room->next;
 	}
 	return (room);
+}
+
+void		set_link(t_room *room1, t_room *room2)
+{
+	t_list	*tmp;
+
+	tmp = ft_lstnew(NULL, 0);
+	tmp->content = room2;
+	if (!room1->links)
+		room1->links = tmp;
+	else
+		ft_lstadd_end(room1->links, tmp);
+}	
+
+void		link_rooms(t_room *room1, t_room *room2)
+{
+	if (!islinked(room1, room2))
+		set_link(room1, room2);
+	if (!islinked(room2, room1))
+		set_link(room2, room1);
 }

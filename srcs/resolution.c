@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_end.c                                    :+:      :+:    :+:   */
+/*   resolution.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/06 15:14:19 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/29 18:50:50 by adenis           ###   ########.fr       */
+/*   Created: 2017/03/29 20:42:19 by adenis            #+#    #+#             */
+/*   Updated: 2017/03/29 20:58:17 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../lem-in.h"
 
-void			ft_lstadd_end(t_list *alst, t_list *new)
+void		movup(void)
 {
-	t_list	*tmp;
+	t_path	*tmp;
 
-	tmp = alst->start;
-	alst->start = alst;
-	while (alst->next)
-		alst = alst->next;
-	alst->next = new;
-	new->start = tmp;
+	tmp = BEGIN;
+	while (tmp != FINISH)
+	{
+		if (!tmp->ant)
+		{
+			ant = 1;
+		}
+		tmp = tmp->next;
+	}
+}
+
+void		resolution(void)
+{
+	while (ANTS)
+	{
+		movup();
+	}
 }

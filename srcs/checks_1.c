@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/28 16:56:02 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/28 17:17:38 by adenis           ###   ########.fr       */
+/*   Updated: 2017/03/29 14:25:57 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int			isroom(char *s)
 {
 	t_room		*room;
 
-	room = BEGIN;
+	room = FIRST;
 	while (room)
 	{
 		if (!ft_strcmp(room->name, s))
