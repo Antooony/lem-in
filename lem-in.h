@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 11:20:23 by adenis            #+#    #+#             */
-/*   Updated: 2017/05/03 07:03:08 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 11:23:31 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@
 # define START g_infos.start
 # define FIRST g_infos.first
 # define END g_infos.end
-# define ANTS g_infos.ants
 # define LINK room1->links
 # define BEGIN g_infos.begin
 # define FINISH g_infos.finish
 # define TMP g_infos.tmp
+# define ANTS g_infos.ants
+# define VAL g_infos.val
 
 typedef	struct s_room	t_room;
 
@@ -47,7 +48,6 @@ struct			s_path
 	size_t		*content_size;
 	int			ant;
 	t_path		*next;
-	t_path		*start;
 };
 
 typedef struct s_parse	t_parse;
@@ -56,6 +56,7 @@ struct			s_parse
 {
 	t_path		*path;
 	int			ants;
+	int			val;
 	t_path		*begin;
 	t_path		*finish;
 	t_path		*tmp;
@@ -75,6 +76,7 @@ int				isroom(char *s);
 int				islink(char *s);
 int				islinked(t_room *room1, t_room *room2);
 
+t_list 			*ft_lstdup(t_list *lst);
 void			get_links(char *s);
 t_room			*get_room(char *s);
 void			get_limits(t_room *room, t_list *lst);
@@ -92,7 +94,6 @@ void			leave(char *s);
 
 void			resolution(void);
 int				get_path(t_room *room1);
-// void			set_link(t_room *room1, t_room *room2);
 void			link_rooms(t_room *room1, t_room *room2);
 t_room			*ft_newroom(void);
 t_room			*fill_room(t_room *room, t_list *lst);

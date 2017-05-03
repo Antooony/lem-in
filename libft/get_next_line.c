@@ -6,108 +6,126 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/28 19:20:47 by adenis            #+#    #+#             */
-/*   Updated: 2017/02/09 14:12:51 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 12:43:18 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		ft_return(char **line, char **str, int ret)
+static size_t	copy_until_newline(char *dest, char *src, size_t len, char c)
 {
-	if (ret == 0 && !*str[0])
+	size_t	i;
+
+	i = 0;
+	if (!dest || !src)
+		return (i);
+	while (src[i	] != c && i < len)
 	{
-		*line = ft_strnew(0);
-		return (0);
+		dest[i] = src[i];
+		i += 1;
 	}
-	if (ft_strchr(*str, '\n'))
-	{
-		if (ft_strchr(*str, '\n') - *str == 0)
-			*line = ft_strnew(0);
-		else
-			*line = ft_strsub(*str, 0, ft_strchr(*str, '\n') - *str);
-		*str = ft_strchr(*str, '\n') + 1;
-	}
-	else
-	{
-		*line = ft_strdup(*str);
-		*str = ft_strnew(0);
-	}
-	return (1);
+	dest[i] = '\0';
+	return (i);
 }
 
-static int		get_input(int fd, char **s, char **line)
+static char		*append_buffer(char *line, char *buffer)
 {
-	char	*buff;
+	size_t	copied_len;
+	size_t	remaining_len;
+	char	temp[BUFF_SIZE + 1];
+
+	copied_len = copy_until_newline(temp, buffer, ft_strlen(buffer), '\n');
+	if (ft_strlen(line) + copied_len >= MAX_LEN_LINE)
+		return (NULL);
+	remaining_len = ft_strlen(buffer) - copied_len;
+	if (copied_len == ft_strlen(buffer))
+		ft_strclr(buffer);
+	else
+	{
+		ft_memmove(buffer, ft_strchr(buffer, '\n') + 1, remaining_len);
+		ft_strclr(buffer + remaining_len);
+	}
+	if (line[0] == 0)
+		ft_memcpy(line, temp, copied_len);
+	else
+		ft_strcat(line, temp);
+	return (line);
+}
+
+static t_list	*set_list(t_list **list, int fd, char *buffer)
+{
+	t_list	*current;
+
+	current = NULL;
+	current = *list;
+	if (!current)
+	{
+		*list = NULL;
+		current = ft_lstnew(buffer, BUFF_SIZE + 1);
+		CUR_FD = fd;
+		*list = current;
+	}
+	if (current && (int)CUR_FD != fd)
+	{
+		while (current)
+		{
+			if ((int)CUR_FD == fd)
+				return (current);
+			current = current->next;
+		}
+		ft_lstadd(list, ft_lstnew(buffer, BUFF_SIZE + 1));
+		current = *list;
+		CUR_FD = fd;
+	}
+	return (current);
+}
+
+static int		get_line(t_list *current, char *temp, char *buffer, char **line)
+{
 	int		ret;
-	char	*str;
 
-	ret = BUFF_SIZE;
-	if (*s)
-		str = ft_strdup(*s);
-	else
-		str = ft_strnew(0);
-	while ((ret == BUFF_SIZE) && str && !ft_strchr(str, '\n'))
+	ret = -1;
+	while (!(ft_strchr(CUR_BUFF, '\n')) && ret != 0)
 	{
-		if (!(buff = ft_strnew(BUFF_SIZE)))
-			return (-1);
-		if ((ret = read(fd, buff, BUFF_SIZE)) < 0)
-			return (-1);
-		buff[ret] = '\0';
-		str = ft_strjoinfree(str, buff);
+		if (ft_strlen(CUR_BUFF) > 0)
+		{
+			if (!(append_buffer(temp, CUR_BUFF)))
+				return (-1);
+		}
+		else
+		{
+			if ((ret = read(CUR_FD, buffer, BUFF_SIZE)) > 0)
+				buffer[ret] = '\0';
+			else if (ret == 0 && temp[0] == 0)
+				return (0);
+			else if (ret == -1)
+				return (-1);
+			ft_memcpy(CUR_BUFF, buffer, ret);
+		}
 	}
-	*s = ft_strdup(str);
-	if (str)
-		ft_strdel(&str);
-	return (ft_return(line, s, ret));
-}
-
-static t_list	*ft_check_fd(t_list *lst, int fd)
-{
-	if (lst->start)
-		lst = lst->start;
-	while (lst)
-	{
-		if (lst->fd == fd)
-			return (lst);
-		lst = lst->next;
-	}
-	return (NULL);
-}
-
-static t_list	*ft_getfd(t_list *lst, int fd)
-{
-	t_list	*tmp;
-
-	if (!lst)
-	{
-		if (!(lst = ft_lstnew(NULL, 0)))
-			return (NULL);
-		lst->fd = fd;
-	}
-	if (!ft_check_fd(lst, fd))
-	{
-		if (!(tmp = ft_lstnew(NULL, 0)))
-			return (NULL);
-		tmp->fd = fd;
-		ft_lstadd_end(lst, tmp);
-	}
-	return (ft_check_fd(lst, fd));
+	if (!(append_buffer(temp, CUR_BUFF)))
+		return (-1);
+	*line = ft_strdup(temp);
+	return (1);
 }
 
 int				get_next_line(const int fd, char **line)
 {
-	static t_list *lst;
+	int				result;
+	char			temp[MAX_LEN_LINE];
+	char			buffer[BUFF_SIZE + 1];
+	static t_list	*list;
+	t_list			*current;
 
-	if (fd < 0 || line == NULL || BUFF_SIZE <= 0)
-	{
-		if (line)
-			*line = ft_strnew(0);
+	result = 0;
+	ft_bzero(buffer, BUFF_SIZE + 1);
+	ft_bzero(temp, MAX_LEN_LINE);
+	if (fd < 0 || BUFF_SIZE < 1 || !(current = set_list(&list, fd, buffer)))
 		return (-1);
-	}
-	if (!(lst = ft_getfd(lst, fd)))
-	{
-		*line = ft_strnew(0);
+	if ((result = get_line(current, temp, buffer, line)) == 1)
+		return (1);
+	else if (result == 0)
+		return (0);
+	else
 		return (-1);
-	}
-	return (get_input(fd, (char **)&lst->content, line));
 }
