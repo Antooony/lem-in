@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 11:20:23 by adenis            #+#    #+#             */
-/*   Updated: 2017/05/03 06:47:37 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 07:03:08 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void			display_rooms(t_room *room);
 void			init_infos(void);
 void			del(void *content, size_t size);
 void			freelst(void *content, size_t content_size);
-void			leave(void);
+void			leave(char *s);
 
 void			resolution(void);
 int				get_path(t_room *room1);

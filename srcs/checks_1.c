@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/28 16:56:02 by adenis            #+#    #+#             */
-/*   Updated: 2017/04/23 14:44:47 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 07:03:40 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ int			isox(char *s)
 		|| !ft_isdigit(s[ft_strchr(s, ' ') + 1 - s]) 
 			|| !ft_isdigit(s[ft_strrchr(s, ' ') + 1 - s]))
 			return (0);
+	if (ft_atol(ft_strchr(s, ' ') + 1) > 2147483647 
+		|| ft_atol(ft_strchr(s, ' ') + 1) < 0)
+		leave("overflow");
+	if (ft_atol(ft_strrchr(s, ' ') + 1) > 2147483647 
+		|| ft_atol(ft_strrchr(s, ' ') + 1) < 0)
+		leave("overflow");
 	return (1);
 }
 

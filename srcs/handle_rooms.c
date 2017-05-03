@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 19:13:24 by adenis            #+#    #+#             */
-/*   Updated: 2017/05/03 06:26:34 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 07:04:11 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_room		*fill_room(t_room *room, t_list *lst)
 	if (!isox(LINE))
 		return (room);
 	if (ft_strchr(LINE, '-'))
-		leave();
+		leave("- in the name");
 	room->name = ft_strsub(LINE, 0, ft_strchr(LINE, ' ') - LINE);
 	if (lst->next && still_ox(lst->next))
 	{

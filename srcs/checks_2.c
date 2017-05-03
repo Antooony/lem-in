@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/28 16:56:02 by adenis            #+#    #+#             */
-/*   Updated: 2017/04/23 14:45:22 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 07:03:57 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ int			still_ox(t_list *lst)
 void		check_up(void)
 {
 	if (!START || !END || !FIRST || START == END)
-		leave();
+		leave("Limits");
 }

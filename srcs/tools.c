@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 15:34:27 by adenis            #+#    #+#             */
-/*   Updated: 2017/04/17 09:14:42 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 07:02:56 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	init_infos(void)
 	g_infos.path = (t_path *)ft_lstnew(NULL, 0);
 }
 
-void		leave(void)
+void		leave(char *s)
 {
-	ft_printf("error\n");
+	ft_printf("error : %s\n", s);
 	exit (0);
 }

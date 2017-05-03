@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 15:02:28 by adenis            #+#    #+#             */
-/*   Updated: 2017/05/03 06:45:19 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 07:19:22 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void		check_path(t_list *path)
 	start = 0;
 	end = 0;
 	if (!path)
-		leave();
+		leave("No path");
 	while (path)
 	{
 		if (!ft_strcmp((char *)path->content, START->name))
@@ -40,7 +40,7 @@ void		check_path(t_list *path)
 		path = path->next;
 	}
 	if (!end || !start)
-		leave();
+		leave("NO end or start");
 }
 
 void		parsing_2(t_list *lst)
@@ -58,7 +58,7 @@ void		parsing_2(t_list *lst)
 	}
 	get_path(START);
 	check_path((t_list *)PATH);
-	tmp = NULL;
+	tmp = (t_path *)ft_lstnew(NULL, 0);
 	// display_lst((t_list *)PATH);
 	// reverse_path(PATH, tmp);
 	// display_lst((t_list *)tmp);
@@ -71,15 +71,13 @@ void		parsing(t_list *lst)
 
 	room = ft_newroom();
 	FIRST = room;
-	ft_isdigit(LINE[0]) ? ANTS = ft_atoi(LINE) : leave();
+	ft_isdigit(LINE[0]) ? ANTS = ft_atoi(LINE) : leave("Ants issue");
 	lst = lst->next;
 	while (lst)
 	{
 		if (!isvalid(LINE))
-			leave();
-		if (iscomment(LINE))
-			lst = lst->next;
-		else if (!ft_strcmp(LINE, "##start") || !ft_strcmp(LINE, "##end"))
+			leave("Line Not valid");
+		if (!ft_strcmp(LINE, "##start") || !ft_strcmp(LINE, "##end"))
 		{
 			get_limits(room, lst);
 			lst = lst->next;

@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 11:12:02 by adenis            #+#    #+#             */
-/*   Updated: 2017/05/03 06:45:08 by adenis           ###   ########.fr       */
+/*   Updated: 2017/05/03 07:21:16 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	check_ants(char *s)
 	while (s[i])
 	{
 		if (!ft_isdigit(s[i]))
-			leave();
+			leave("bad format for ants number");
 		i++;
 	}
+	if (ft_atol(s) > 2147483647 || ft_atol(s) <= 0)
+		leave("overflow on ants number");
 }
 
 void	pre_check(t_list *lst)
@@ -41,11 +43,11 @@ void	pre_check(t_list *lst)
 			rooms = 1;
 		if ((ft_strchr(lst->content, '-') && !rooms)
 			|| (isox(lst->content) && links))
-			leave();
+			leave("pre-check");
 		lst = lst->next;
 	}
 	if (!rooms || !links)
-		leave();
+		leave("pre-check");
 }
 
 void	display_input(t_list *lst)
@@ -82,14 +84,10 @@ t_list *ft_lstdup(t_list *lst)
 	return (start);
 }
 
-t_list	*clean_lst(t_list *list1)
+void	clean_lst(t_list *lst)
 {
-	t_list		*start;
 	t_list		*tmp;
-	t_list		*lst;
 
-	lst = ft_lstdup(list1);
-	start = lst;
 	while (lst)
 	{
 		if (lst->next && iscomment((char *)lst->next->content))
@@ -101,7 +99,6 @@ t_list	*clean_lst(t_list *list1)
 		}
 		lst = lst->next;
 	}
-	return (start);
 }
 
 int		main(void)
@@ -121,8 +118,8 @@ int		main(void)
 		}
 	}
 	pre_check(lst);
-	tmp = lst;
-	lst = clean_lst(lst);
+	tmp = ft_lstdup(lst);
+	clean_lst(lst);
 	parsing(lst);
 	display_input(tmp);
 	display_lst((t_list *)PATH);
