@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 15:34:27 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/29 20:50:25 by adenis           ###   ########.fr       */
+/*   Updated: 2017/04/17 09:14:42 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,14 @@ void	del(void *content, size_t size)
 
 void	display_lst(t_list	*lst)
 {
-	ft_printf("%s\n", (char *)lst->content);
-	lst->next ? display_lst(lst->next) : NULL;
+	while (lst)
+	{
+		ft_printf("%s", (char *)lst->content);
+		if (lst->next)
+			ft_printf("->");
+		lst = lst->next;
+	}
+	ft_putchar('\n');
 }
 
 void	init_infos(void)

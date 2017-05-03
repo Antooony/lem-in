@@ -6,7 +6,7 @@
 /*   By: adenis <adenis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/28 16:56:02 by adenis            #+#    #+#             */
-/*   Updated: 2017/03/29 14:25:57 by adenis           ###   ########.fr       */
+/*   Updated: 2017/04/23 14:44:47 by adenis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,12 @@ int			islink(char *s)
 		|| (size_t)(ft_strchr(s, '-') - s) == ft_strlen(s)) 
 		return (0);
 	tmp = ft_strsub(s, 0, ft_strchr(s, '-') - s);
-	tmp2 = ft_strchr(s, '-') + 1;
 	tmp2 = ft_strsub(s, ft_strchr(s, '-') + 1 - s, 
 		ft_strlen(s) - (ft_strchr(s, '-') - s));
 	if (isroom(tmp) && isroom(tmp2))
 		out = 1;
+	ft_strdel(&tmp);
+	ft_strdel(&tmp2);
 	return (out);
 }
 
